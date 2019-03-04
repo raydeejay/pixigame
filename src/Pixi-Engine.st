@@ -3,11 +3,13 @@ Object subclass: #Actor
 	instanceVariableNames: 'sprite vx vy'
 	package: 'Pixi-Engine'!
 !Actor commentStamp!
+I am meant to be subclassed.
+
 I represent an entity on the game world capable of acting and interacting.
 
 I proxy most of the messages for my Sprite.
 
-I must be subclassed, and my registry configured, if it is to be used.!
+Override my registry method to use the registerAs: method.!
 
 !Actor methodsFor: 'accessing'!
 
@@ -157,6 +159,10 @@ for: aTexture
 Object subclass: #Game
 	instanceVariableNames: 'app state message scene'
 	package: 'Pixi-Engine'!
+!Game commentStamp!
+I represent a game.
+
+I am meant to be subclassed to create your own game. That subclass should be the Amber entry point.!
 
 !Game methodsFor: 'action'!
 
@@ -416,9 +422,11 @@ Object subclass: #Registry
 	instanceVariableNames: 'dictionary'
 	package: 'Pixi-Engine'!
 !Registry commentStamp!
-I proxy my singleton, which itself proxies a dictionary to provide easy access to game elements.
+I am meant to be subclassed.
 
-I am meant to be subclassed, and my singletons usually configured to be used by subclasses of other classes providing registry facilities, like Actor or Scene.!
+I act as an easily accessible dictionary. Other classes can use my subclasses to store Associations, usually of Symbol -> Object.
+
+Actor and Scene subclasses both have a registry method that should be overridden to return one of my subclasses.!
 
 !Registry methodsFor: 'accessing'!
 

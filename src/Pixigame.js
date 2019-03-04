@@ -983,7 +983,7 @@ $globals.Treasure);
 
 $core.addClass("GameRegistry", $globals.Registry, [], "Pixigame");
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.GameRegistry.comment="I am the central Registry for the game.\x0a\x0aGameActor and the Scenes all use me as a registry.";
+$globals.GameRegistry.comment="I am the central Registry for the game.\x0a\x0aGameActor and the GameScenes all use me as a registry.";
 //>>excludeEnd("ide");
 
 
@@ -1352,7 +1352,7 @@ $globals.PlayScene);
 
 $core.addClass("Pixigame", $globals.Game, [], "Pixigame");
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.Pixigame.comment="I am the Amber application.";
+$globals.Pixigame.comment="I am the Amber application.\x0a\x0aI also happen to subclass Game.";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({

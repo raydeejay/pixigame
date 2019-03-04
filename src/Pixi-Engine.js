@@ -7,7 +7,7 @@ $pkg.transport = {"type":"amd","amdNamespace":"amber-pixigame"};
 
 $core.addClass("Actor", $globals.Object, ["sprite", "vx", "vy"], "Pixi-Engine");
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.Actor.comment="I represent an entity on the game world capable of acting and interacting.\x0a\x0aI proxy most of the messages for my Sprite.\x0a\x0aI must be subclassed, and my registry configured, if it is to be used.";
+$globals.Actor.comment="I am meant to be subclassed.\x0a\x0aI represent an entity on the game world capable of acting and interacting.\x0a\x0aI proxy most of the messages for my Sprite.\x0a\x0aOverride my registry method to use the registerAs: method.";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
@@ -723,6 +723,9 @@ $globals.Actor.a$cls);
 
 
 $core.addClass("Game", $globals.Object, ["app", "state", "message", "scene"], "Pixi-Engine");
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.Game.comment="I represent a game.\x0a\x0aI am meant to be subclassed to create your own game. That subclass should be the Amber entry point.";
+//>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
 selector: "augmentPage",
@@ -1784,7 +1787,7 @@ $globals.Libs.a$cls);
 
 $core.addClass("Registry", $globals.Object, ["dictionary"], "Pixi-Engine");
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.Registry.comment="I proxy my singleton, which itself proxies a dictionary to provide easy access to game elements.\x0a\x0aI am meant to be subclassed, and my singletons usually configured to be used by subclasses of other classes providing registry facilities, like Actor or Scene.";
+$globals.Registry.comment="I am meant to be subclassed.\x0a\x0aI act as an easily accessible dictionary. Other classes can use my subclasses to store Associations, usually of Symbol -> Object.\x0a\x0aActor and Scene subclasses both have a registry method that should be overridden to return one of my subclasses.";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({

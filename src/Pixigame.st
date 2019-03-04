@@ -229,7 +229,7 @@ Registry subclass: #GameRegistry
 !GameRegistry commentStamp!
 I am the central Registry for the game.
 
-GameActor and the Scenes all use me as a registry.!
+GameActor and the GameScenes all use me as a registry.!
 
 GameRegistry subclass: #Assets
 	instanceVariableNames: ''
@@ -344,7 +344,9 @@ Game subclass: #Pixigame
 	instanceVariableNames: ''
 	package: 'Pixigame'!
 !Pixigame commentStamp!
-I am the Amber application.!
+I am the Amber application.
+
+I also happen to subclass Game.!
 
 !Pixigame methodsFor: 'action'!
 
