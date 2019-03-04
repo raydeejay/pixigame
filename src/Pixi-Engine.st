@@ -154,6 +154,70 @@ for: aTexture
 	^ self new sprite: (Libs pixi TilingSprite newValue: aTexture); yourself"
 ! !
 
+Object subclass: #Game
+	instanceVariableNames: 'app state message scene'
+	package: 'Pixi-Engine'!
+
+!Game methodsFor: 'action'!
+
+end
+	"Do nothing."
+! !
+
+!Game methodsFor: 'initialization'!
+
+initialize
+	self class instance: self.
+	GameRegistry at: #rng put: Random new.
+! !
+
+!Game methodsFor: 'setup'!
+
+loadResources
+	self resources do: [ :each | Libs pixi loader add: each ].
+	Libs pixi loader load: [ self setup ]
+!
+
+resources
+	"Override this method to return an Array of resources to be loaded"
+	self shouldBeImplemented
+!
+
+setup
+	state := [ :delta | self update: delta ].
+	app ticker add: [ :delta | state value: delta ]
+! !
+
+!Game methodsFor: 'starting'!
+
+augmentPage
+	app ifNil: [ app := Libs pixi Application
+		newValue: #{
+			'width' -> 512.
+			'height' -> 512.
+			'antialiasing' -> true.
+			'transparent' -> false.
+			'resolution' -> 1 } ].
+	document body appendChild: app view.
+	self loadResources
+! !
+
+Game class instanceVariableNames: 'instance'!
+
+!Game class methodsFor: 'starting'!
+
+instance
+	^ instance
+!
+
+instance: anInstance
+	^ instance := anInstance
+!
+
+start
+	self new augmentPage
+! !
+
 Object subclass: #Key
 	instanceVariableNames: 'code'
 	package: 'Pixi-Engine'!

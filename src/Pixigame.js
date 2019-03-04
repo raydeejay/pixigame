@@ -14,523 +14,6 @@ $pkg.innerEval = function (expr) { return eval(expr); };
 $pkg.imports = ["PIXI=pixi", "./Pixi-Engine", "amber/jquery/Wrappers-JQuery", "amber/web/Web", "silk/Silk"];
 $pkg.transport = {"type":"amd","amdNamespace":"amber-pixigame"};
 
-$core.addClass("Game", $globals.Object, ["app", "state", "message", "scene"], "Pixigame");
-$core.addMethod(
-$core.method({
-selector: "augmentPage",
-protocol: "starting",
-fn: function (){
-var self=this,$self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1,$receiver;
-$1=$self["@app"];
-if(($receiver = $1) == null || $receiver.a$nil){
-$self["@app"]=$recv($recv($recv($globals.Libs)._pixi())._Application())._newValue_($globals.HashedCollection._newFromPairs_(["width",(512),"height",(512),"antialiasing",true,"transparent",false,"resolution",(1)]));
-$self["@app"];
-} else {
-$1;
-}
-$recv($recv(document)._body())._appendChild_($recv($self["@app"])._view());
-$self._loadResources();
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"augmentPage",{},$globals.Game)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "augmentPage\x0a\x09app ifNil: [ app := Libs pixi Application\x0a\x09\x09newValue: #{\x0a\x09\x09\x09'width' -> 512.\x0a\x09\x09\x09'height' -> 512.\x0a\x09\x09\x09'antialiasing' -> true.\x0a\x09\x09\x09'transparent' -> false.\x0a\x09\x09\x09'resolution' -> 1 } ].\x0a\x09document body appendChild: app view.\x0a\x09self loadResources",
-referencedClasses: ["Libs"],
-//>>excludeEnd("ide");
-messageSends: ["ifNil:", "newValue:", "Application", "pixi", "appendChild:", "body", "view", "loadResources"]
-}),
-$globals.Game);
-
-$core.addMethod(
-$core.method({
-selector: "end",
-protocol: "action",
-fn: function (){
-var self=this,$self=this;
-return self;
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "end\x0a\x09\x22(Registry at: #scene) visible: false.\x0a\x09gameOverScene visible: true\x22",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.Game);
-
-$core.addMethod(
-$core.method({
-selector: "initialize",
-protocol: "initialization",
-fn: function (){
-var self=this,$self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-$recv($self._class())._instance_(self);
-$recv($globals.GameRegistry)._at_put_("rng",$recv($globals.Random)._new());
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.Game)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "initialize\x0a\x09self class instance: self.\x0a\x09GameRegistry at: #rng put: Random new.",
-referencedClasses: ["GameRegistry", "Random"],
-//>>excludeEnd("ide");
-messageSends: ["instance:", "class", "at:put:", "new"]
-}),
-$globals.Game);
-
-$core.addMethod(
-$core.method({
-selector: "loadResources",
-protocol: "setup",
-fn: function (){
-var self=this,$self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $2,$1;
-$recv($self._resources())._do_((function(each){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-$2=$recv($globals.Libs)._pixi();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["pixi"]=1;
-//>>excludeEnd("ctx");
-$1=$recv($2)._loader();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["loader"]=1;
-//>>excludeEnd("ctx");
-return $recv($1)._add_(each);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)});
-//>>excludeEnd("ctx");
-}));
-$recv($recv($recv($globals.Libs)._pixi())._loader())._load_((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return $self._setup();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)});
-//>>excludeEnd("ctx");
-}));
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"loadResources",{},$globals.Game)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "loadResources\x0a\x09self resources do: [ :each | Libs pixi loader add: each ].\x0a\x09Libs pixi loader load: [ self setup ]",
-referencedClasses: ["Libs"],
-//>>excludeEnd("ide");
-messageSends: ["do:", "resources", "add:", "loader", "pixi", "load:", "setup"]
-}),
-$globals.Game);
-
-$core.addMethod(
-$core.method({
-selector: "resources",
-protocol: "setup",
-fn: function (){
-var self=this,$self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-$self._shouldBeImplemented();
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"resources",{},$globals.Game)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "resources\x0a\x09self shouldBeImplemented",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["shouldBeImplemented"]
-}),
-$globals.Game);
-
-$core.addMethod(
-$core.method({
-selector: "setup",
-protocol: "setup",
-fn: function (){
-var self=this,$self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-$self["@state"]=(function(delta){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return $self._update_(delta);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({delta:delta},$ctx1,1)});
-//>>excludeEnd("ctx");
-});
-$recv($recv($self["@app"])._ticker())._add_((function(delta){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return $recv($self["@state"])._value_(delta);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({delta:delta},$ctx1,2)});
-//>>excludeEnd("ctx");
-}));
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"setup",{},$globals.Game)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "setup\x0a\x09state := [ :delta | self update: delta ].\x0a\x09app ticker add: [ :delta | state value: delta ]",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["update:", "add:", "ticker", "value:"]
-}),
-$globals.Game);
-
-
-$globals.Game.a$cls.iVarNames = ["instance"];
-$core.addMethod(
-$core.method({
-selector: "instance",
-protocol: "starting",
-fn: function (){
-var self=this,$self=this;
-return $self["@instance"];
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "instance\x0a\x09^ instance",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.Game.a$cls);
-
-$core.addMethod(
-$core.method({
-selector: "instance:",
-protocol: "starting",
-fn: function (anInstance){
-var self=this,$self=this;
-var $1;
-$self["@instance"]=anInstance;
-$1=$self["@instance"];
-return $1;
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["anInstance"],
-source: "instance: anInstance\x0a\x09^ instance := anInstance",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.Game.a$cls);
-
-$core.addMethod(
-$core.method({
-selector: "start",
-protocol: "starting",
-fn: function (){
-var self=this,$self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-$recv($self._new())._augmentPage();
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"start",{},$globals.Game.a$cls)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "start\x0a\x09self new augmentPage",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["augmentPage", "new"]
-}),
-$globals.Game.a$cls);
-
-
-$core.addClass("Pixigame", $globals.Game, [], "Pixigame");
-//>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.Pixigame.comment="I am the Amber application.";
-//>>excludeEnd("ide");
-$core.addMethod(
-$core.method({
-selector: "initialize",
-protocol: "initialization",
-fn: function (){
-var self=this,$self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-(
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.supercall = true,
-//>>excludeEnd("ctx");
-($globals.Pixigame.superclass||$boot.nilAsClass).fn.prototype._initialize.apply($self, []));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.supercall = false;
-//>>excludeEnd("ctx");;
-$self["@app"]=$recv($recv($recv($globals.Libs)._pixi())._Application())._newValue_($globals.HashedCollection._newFromPairs_(["width",(512),"height",(512),"antialiasing",true,"transparent",false,"resolution",(1)]));
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.Pixigame)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "initialize\x0a\x09super initialize.\x0a\x09app := Libs pixi Application newValue: #{\x0a\x09\x09'width' -> 512.\x0a\x09\x09'height' -> 512.\x0a\x09\x09'antialiasing' -> true.\x0a\x09\x09'transparent' -> false.\x0a\x09\x09'resolution' -> 1 }",
-referencedClasses: ["Libs"],
-//>>excludeEnd("ide");
-messageSends: ["initialize", "newValue:", "Application", "pixi"]
-}),
-$globals.Pixigame);
-
-$core.addMethod(
-$core.method({
-selector: "lose",
-protocol: "action",
-fn: function (){
-var self=this,$self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1;
-$recv($globals.GameRegistry)._at_put_("endMessage","You lost!");
-$1=$recv($globals.GameActor)._at_("scene");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["at:"]=1;
-//>>excludeEnd("ctx");
-$recv($1)._switchTo_($recv($globals.GameActor)._at_("endScene"));
-$self["@state"]=(function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return $self._end();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
-//>>excludeEnd("ctx");
-});
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"lose",{},$globals.Pixigame)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "lose\x0a\x09GameRegistry at: #endMessage put: 'You lost!'.\x0a\x09(GameActor at: #scene) switchTo: (GameActor at: #endScene).\x0a\x09state := [ self end ]",
-referencedClasses: ["GameRegistry", "GameActor"],
-//>>excludeEnd("ide");
-messageSends: ["at:put:", "switchTo:", "at:", "end"]
-}),
-$globals.Pixigame);
-
-$core.addMethod(
-$core.method({
-selector: "resources",
-protocol: "setup",
-fn: function (){
-var self=this,$self=this;
-return ["images/treasureHunter.json","images/cat.png"];
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "resources\x0a\x09^ {'images/treasureHunter.json'. 'images/cat.png'}",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.Pixigame);
-
-$core.addMethod(
-$core.method({
-selector: "setup",
-protocol: "setup",
-fn: function (){
-var self=this,$self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-(
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.supercall = true,
-//>>excludeEnd("ctx");
-($globals.Pixigame.superclass||$boot.nilAsClass).fn.prototype._setup.apply($self, []));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.supercall = false;
-//>>excludeEnd("ctx");;
-$recv($recv($globals.Assets)._instance())._dictionary_($recv($recv($recv($recv($recv($globals.Libs)._pixi())._loader())._resources())._at_("images/treasureHunter.json"))._textures());
-$self._setupScenes();
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"setup",{},$globals.Pixigame)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "setup\x0a\x09super setup.\x0a\x09Assets instance dictionary: (Libs pixi loader resources at: 'images/treasureHunter.json') textures.\x0a\x09self setupScenes",
-referencedClasses: ["Assets", "Libs"],
-//>>excludeEnd("ide");
-messageSends: ["setup", "dictionary:", "instance", "textures", "at:", "resources", "loader", "pixi", "setupScenes"]
-}),
-$globals.Pixigame);
-
-$core.addMethod(
-$core.method({
-selector: "setupScenes",
-protocol: "setup",
-fn: function (){
-var self=this,$self=this;
-var sc,endScene,style;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1;
-$1=$recv($self["@app"])._stage();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["stage"]=1;
-//>>excludeEnd("ctx");
-sc=$recv($globals.PlayScene)._on_($1);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["on:"]=1;
-//>>excludeEnd("ctx");
-$recv($globals.GameActor)._at_put_("scene",sc);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["at:put:"]=1;
-//>>excludeEnd("ctx");
-$recv(sc)._setup();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["setup"]=1;
-//>>excludeEnd("ctx");
-endScene=$recv($globals.GameOverScene)._on_($recv($self["@app"])._stage());
-$recv($globals.GameActor)._at_put_("endScene",endScene);
-$recv(endScene)._setup();
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"setupScenes",{sc:sc,endScene:endScene,style:style},$globals.Pixigame)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "setupScenes\x0a\x09| sc endScene style |\x0a\x09\x0a\x09sc := PlayScene on: app stage.\x0a\x09GameActor at: #scene put: sc.\x0a\x09sc setup.\x0a\x0a\x09endScene := GameOverScene on: app stage.\x0a\x09GameActor at: #endScene put: endScene.\x0a\x09endScene setup",
-referencedClasses: ["PlayScene", "GameActor", "GameOverScene"],
-//>>excludeEnd("ide");
-messageSends: ["on:", "stage", "at:put:", "setup"]
-}),
-$globals.Pixigame);
-
-$core.addMethod(
-$core.method({
-selector: "update:",
-protocol: "action",
-fn: function (aDelta){
-var self=this,$self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-$recv($recv($globals.GameRegistry)._at_("scene"))._update();
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"update:",{aDelta:aDelta},$globals.Pixigame)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["aDelta"],
-source: "update: aDelta\x0a\x09(GameRegistry at: #scene) update",
-referencedClasses: ["GameRegistry"],
-//>>excludeEnd("ide");
-messageSends: ["update", "at:"]
-}),
-$globals.Pixigame);
-
-$core.addMethod(
-$core.method({
-selector: "win",
-protocol: "action",
-fn: function (){
-var self=this,$self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1;
-$recv($globals.GameRegistry)._at_put_("endMessage","You won!");
-$1=$recv($globals.GameActor)._at_("scene");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["at:"]=1;
-//>>excludeEnd("ctx");
-$recv($1)._switchTo_($recv($globals.GameActor)._at_("endScene"));
-$self["@state"]=(function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return $self._end();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
-//>>excludeEnd("ctx");
-});
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"win",{},$globals.Pixigame)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "win\x0a\x09GameRegistry at: #endMessage put: 'You won!'.\x0a\x09(GameActor at: #scene) switchTo: (GameActor at: #endScene).\x0a\x09state := [ self end ]",
-referencedClasses: ["GameRegistry", "GameActor"],
-//>>excludeEnd("ide");
-messageSends: ["at:put:", "switchTo:", "at:", "end"]
-}),
-$globals.Pixigame);
-
-
-$core.addMethod(
-$core.method({
-selector: "unusedProtection",
-protocol: "starting",
-fn: function (){
-var self=this,$self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-$self._shouldNotImplement();
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"unusedProtection",{},$globals.Pixigame.a$cls)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "unusedProtection\x0a\x09\x22this method is here in case the compilation breaks and destroys the source code of the last class-side method\x22\x0a\x09self shouldNotImplement",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["shouldNotImplement"]
-}),
-$globals.Pixigame.a$cls);
-
-
 $core.addClass("GameActor", $globals.Actor, [], "Pixigame");
 $core.addMethod(
 $core.method({
@@ -1865,6 +1348,265 @@ messageSends: ["at:", "update", "do:", "or:", "hits:", "ifTrue:ifFalse:", "takeD
 }),
 $globals.PlayScene);
 
+
+
+$core.addClass("Pixigame", $globals.Game, [], "Pixigame");
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.Pixigame.comment="I am the Amber application.";
+//>>excludeEnd("ide");
+$core.addMethod(
+$core.method({
+selector: "initialize",
+protocol: "initialization",
+fn: function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+(
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.supercall = true,
+//>>excludeEnd("ctx");
+($globals.Pixigame.superclass||$boot.nilAsClass).fn.prototype._initialize.apply($self, []));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.supercall = false;
+//>>excludeEnd("ctx");;
+$self["@app"]=$recv($recv($recv($globals.Libs)._pixi())._Application())._newValue_($globals.HashedCollection._newFromPairs_(["width",(512),"height",(512),"antialiasing",true,"transparent",false,"resolution",(1)]));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.Pixigame)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initialize\x0a\x09super initialize.\x0a\x09app := Libs pixi Application newValue: #{\x0a\x09\x09'width' -> 512.\x0a\x09\x09'height' -> 512.\x0a\x09\x09'antialiasing' -> true.\x0a\x09\x09'transparent' -> false.\x0a\x09\x09'resolution' -> 1 }",
+referencedClasses: ["Libs"],
+//>>excludeEnd("ide");
+messageSends: ["initialize", "newValue:", "Application", "pixi"]
+}),
+$globals.Pixigame);
+
+$core.addMethod(
+$core.method({
+selector: "lose",
+protocol: "action",
+fn: function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1;
+$recv($globals.GameRegistry)._at_put_("endMessage","You lost!");
+$1=$recv($globals.GameActor)._at_("scene");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=1;
+//>>excludeEnd("ctx");
+$recv($1)._switchTo_($recv($globals.GameActor)._at_("endScene"));
+$self["@state"]=(function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $self._end();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
+//>>excludeEnd("ctx");
+});
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"lose",{},$globals.Pixigame)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "lose\x0a\x09GameRegistry at: #endMessage put: 'You lost!'.\x0a\x09(GameActor at: #scene) switchTo: (GameActor at: #endScene).\x0a\x09state := [ self end ]",
+referencedClasses: ["GameRegistry", "GameActor"],
+//>>excludeEnd("ide");
+messageSends: ["at:put:", "switchTo:", "at:", "end"]
+}),
+$globals.Pixigame);
+
+$core.addMethod(
+$core.method({
+selector: "resources",
+protocol: "setup",
+fn: function (){
+var self=this,$self=this;
+return ["images/treasureHunter.json","images/cat.png"];
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "resources\x0a\x09^ {'images/treasureHunter.json'. 'images/cat.png'}",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.Pixigame);
+
+$core.addMethod(
+$core.method({
+selector: "setup",
+protocol: "setup",
+fn: function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+(
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.supercall = true,
+//>>excludeEnd("ctx");
+($globals.Pixigame.superclass||$boot.nilAsClass).fn.prototype._setup.apply($self, []));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.supercall = false;
+//>>excludeEnd("ctx");;
+$recv($recv($globals.Assets)._instance())._dictionary_($recv($recv($recv($recv($recv($globals.Libs)._pixi())._loader())._resources())._at_("images/treasureHunter.json"))._textures());
+$self._setupScenes();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"setup",{},$globals.Pixigame)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "setup\x0a\x09super setup.\x0a\x09Assets instance dictionary: (Libs pixi loader resources at: 'images/treasureHunter.json') textures.\x0a\x09self setupScenes",
+referencedClasses: ["Assets", "Libs"],
+//>>excludeEnd("ide");
+messageSends: ["setup", "dictionary:", "instance", "textures", "at:", "resources", "loader", "pixi", "setupScenes"]
+}),
+$globals.Pixigame);
+
+$core.addMethod(
+$core.method({
+selector: "setupScenes",
+protocol: "setup",
+fn: function (){
+var self=this,$self=this;
+var sc,endScene,style;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1;
+$1=$recv($self["@app"])._stage();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["stage"]=1;
+//>>excludeEnd("ctx");
+sc=$recv($globals.PlayScene)._on_($1);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["on:"]=1;
+//>>excludeEnd("ctx");
+$recv($globals.GameActor)._at_put_("scene",sc);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:put:"]=1;
+//>>excludeEnd("ctx");
+$recv(sc)._setup();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["setup"]=1;
+//>>excludeEnd("ctx");
+endScene=$recv($globals.GameOverScene)._on_($recv($self["@app"])._stage());
+$recv($globals.GameActor)._at_put_("endScene",endScene);
+$recv(endScene)._setup();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"setupScenes",{sc:sc,endScene:endScene,style:style},$globals.Pixigame)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "setupScenes\x0a\x09| sc endScene style |\x0a\x09\x0a\x09sc := PlayScene on: app stage.\x0a\x09GameActor at: #scene put: sc.\x0a\x09sc setup.\x0a\x0a\x09endScene := GameOverScene on: app stage.\x0a\x09GameActor at: #endScene put: endScene.\x0a\x09endScene setup",
+referencedClasses: ["PlayScene", "GameActor", "GameOverScene"],
+//>>excludeEnd("ide");
+messageSends: ["on:", "stage", "at:put:", "setup"]
+}),
+$globals.Pixigame);
+
+$core.addMethod(
+$core.method({
+selector: "update:",
+protocol: "action",
+fn: function (aDelta){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv($recv($globals.GameRegistry)._at_("scene"))._update();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"update:",{aDelta:aDelta},$globals.Pixigame)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["aDelta"],
+source: "update: aDelta\x0a\x09(GameRegistry at: #scene) update",
+referencedClasses: ["GameRegistry"],
+//>>excludeEnd("ide");
+messageSends: ["update", "at:"]
+}),
+$globals.Pixigame);
+
+$core.addMethod(
+$core.method({
+selector: "win",
+protocol: "action",
+fn: function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1;
+$recv($globals.GameRegistry)._at_put_("endMessage","You won!");
+$1=$recv($globals.GameActor)._at_("scene");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=1;
+//>>excludeEnd("ctx");
+$recv($1)._switchTo_($recv($globals.GameActor)._at_("endScene"));
+$self["@state"]=(function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $self._end();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
+//>>excludeEnd("ctx");
+});
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"win",{},$globals.Pixigame)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "win\x0a\x09GameRegistry at: #endMessage put: 'You won!'.\x0a\x09(GameActor at: #scene) switchTo: (GameActor at: #endScene).\x0a\x09state := [ self end ]",
+referencedClasses: ["GameRegistry", "GameActor"],
+//>>excludeEnd("ide");
+messageSends: ["at:put:", "switchTo:", "at:", "end"]
+}),
+$globals.Pixigame);
+
+
+$core.addMethod(
+$core.method({
+selector: "unusedProtection",
+protocol: "starting",
+fn: function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$self._shouldNotImplement();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"unusedProtection",{},$globals.Pixigame.a$cls)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "unusedProtection\x0a\x09\x22this method is here in case the compilation breaks and destroys the source code of the last class-side method\x22\x0a\x09self shouldNotImplement",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["shouldNotImplement"]
+}),
+$globals.Pixigame.a$cls);
 
 $core.addMethod(
 $core.method({

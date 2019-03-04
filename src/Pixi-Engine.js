@@ -722,6 +722,264 @@ messageSends: ["shouldBeImplemented"]
 $globals.Actor.a$cls);
 
 
+$core.addClass("Game", $globals.Object, ["app", "state", "message", "scene"], "Pixi-Engine");
+$core.addMethod(
+$core.method({
+selector: "augmentPage",
+protocol: "starting",
+fn: function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1,$receiver;
+$1=$self["@app"];
+if(($receiver = $1) == null || $receiver.a$nil){
+$self["@app"]=$recv($recv($recv($globals.Libs)._pixi())._Application())._newValue_($globals.HashedCollection._newFromPairs_(["width",(512),"height",(512),"antialiasing",true,"transparent",false,"resolution",(1)]));
+$self["@app"];
+} else {
+$1;
+}
+$recv($recv(document)._body())._appendChild_($recv($self["@app"])._view());
+$self._loadResources();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"augmentPage",{},$globals.Game)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "augmentPage\x0a\x09app ifNil: [ app := Libs pixi Application\x0a\x09\x09newValue: #{\x0a\x09\x09\x09'width' -> 512.\x0a\x09\x09\x09'height' -> 512.\x0a\x09\x09\x09'antialiasing' -> true.\x0a\x09\x09\x09'transparent' -> false.\x0a\x09\x09\x09'resolution' -> 1 } ].\x0a\x09document body appendChild: app view.\x0a\x09self loadResources",
+referencedClasses: ["Libs"],
+//>>excludeEnd("ide");
+messageSends: ["ifNil:", "newValue:", "Application", "pixi", "appendChild:", "body", "view", "loadResources"]
+}),
+$globals.Game);
+
+$core.addMethod(
+$core.method({
+selector: "end",
+protocol: "action",
+fn: function (){
+var self=this,$self=this;
+return self;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "end\x0a\x09\x22Do nothing.\x22",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.Game);
+
+$core.addMethod(
+$core.method({
+selector: "initialize",
+protocol: "initialization",
+fn: function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv($self._class())._instance_(self);
+$recv($globals.GameRegistry)._at_put_("rng",$recv($globals.Random)._new());
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.Game)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initialize\x0a\x09self class instance: self.\x0a\x09GameRegistry at: #rng put: Random new.",
+referencedClasses: ["GameRegistry", "Random"],
+//>>excludeEnd("ide");
+messageSends: ["instance:", "class", "at:put:", "new"]
+}),
+$globals.Game);
+
+$core.addMethod(
+$core.method({
+selector: "loadResources",
+protocol: "setup",
+fn: function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $2,$1;
+$recv($self._resources())._do_((function(each){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+$2=$recv($globals.Libs)._pixi();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["pixi"]=1;
+//>>excludeEnd("ctx");
+$1=$recv($2)._loader();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["loader"]=1;
+//>>excludeEnd("ctx");
+return $recv($1)._add_(each);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+$recv($recv($recv($globals.Libs)._pixi())._loader())._load_((function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $self._setup();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"loadResources",{},$globals.Game)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "loadResources\x0a\x09self resources do: [ :each | Libs pixi loader add: each ].\x0a\x09Libs pixi loader load: [ self setup ]",
+referencedClasses: ["Libs"],
+//>>excludeEnd("ide");
+messageSends: ["do:", "resources", "add:", "loader", "pixi", "load:", "setup"]
+}),
+$globals.Game);
+
+$core.addMethod(
+$core.method({
+selector: "resources",
+protocol: "setup",
+fn: function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$self._shouldBeImplemented();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"resources",{},$globals.Game)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "resources\x0a\x09\x22Override this method to return an Array of resources to be loaded\x22\x0a\x09self shouldBeImplemented",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["shouldBeImplemented"]
+}),
+$globals.Game);
+
+$core.addMethod(
+$core.method({
+selector: "setup",
+protocol: "setup",
+fn: function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$self["@state"]=(function(delta){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $self._update_(delta);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({delta:delta},$ctx1,1)});
+//>>excludeEnd("ctx");
+});
+$recv($recv($self["@app"])._ticker())._add_((function(delta){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv($self["@state"])._value_(delta);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({delta:delta},$ctx1,2)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"setup",{},$globals.Game)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "setup\x0a\x09state := [ :delta | self update: delta ].\x0a\x09app ticker add: [ :delta | state value: delta ]",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["update:", "add:", "ticker", "value:"]
+}),
+$globals.Game);
+
+
+$globals.Game.a$cls.iVarNames = ["instance"];
+$core.addMethod(
+$core.method({
+selector: "instance",
+protocol: "starting",
+fn: function (){
+var self=this,$self=this;
+return $self["@instance"];
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "instance\x0a\x09^ instance",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.Game.a$cls);
+
+$core.addMethod(
+$core.method({
+selector: "instance:",
+protocol: "starting",
+fn: function (anInstance){
+var self=this,$self=this;
+var $1;
+$self["@instance"]=anInstance;
+$1=$self["@instance"];
+return $1;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anInstance"],
+source: "instance: anInstance\x0a\x09^ instance := anInstance",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.Game.a$cls);
+
+$core.addMethod(
+$core.method({
+selector: "start",
+protocol: "starting",
+fn: function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv($self._new())._augmentPage();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"start",{},$globals.Game.a$cls)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "start\x0a\x09self new augmentPage",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["augmentPage", "new"]
+}),
+$globals.Game.a$cls);
+
+
 $core.addClass("Key", $globals.Object, ["code"], "Pixi-Engine");
 //>>excludeStart("ide", pragmas.excludeIdeData);
 $globals.Key.comment="I represent a keyboard key. I delegate all my methods to the Keyboard singleton.";
