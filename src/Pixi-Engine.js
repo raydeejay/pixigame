@@ -105,6 +105,30 @@ $globals.Actor);
 
 $core.addMethod(
 $core.method({
+selector: "game",
+protocol: "accessing",
+fn: function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$self._shouldBeImplemented();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"game",{},$globals.Actor)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "game\x0a\x09self shouldBeImplemented",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["shouldBeImplemented"]
+}),
+$globals.Actor);
+
+$core.addMethod(
+$core.method({
 selector: "halfHeight",
 protocol: "calculating",
 fn: function (){

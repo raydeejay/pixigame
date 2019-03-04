@@ -1,8 +1,145 @@
 Smalltalk createPackage: 'Pixigame'!
 (Smalltalk packageAt: 'Pixigame' ifAbsent: [ self error: 'Package not created: Pixigame' ]) imports: {'PIXI' -> 'pixi'. './Pixi-Engine'. 'amber/jquery/Wrappers-JQuery'. 'amber/web/Web'. 'silk/Silk'}!
+Object subclass: #Game
+	instanceVariableNames: 'app state message scene'
+	package: 'Pixigame'!
+
+!Game methodsFor: 'action'!
+
+end
+	"(Registry at: #scene) visible: false.
+	gameOverScene visible: true"
+! !
+
+!Game methodsFor: 'initialization'!
+
+initialize
+	self class instance: self.
+	GameRegistry at: #rng put: Random new.
+! !
+
+!Game methodsFor: 'setup'!
+
+loadResources
+	self resources do: [ :each | Libs pixi loader add: each ].
+	Libs pixi loader load: [ self setup ]
+!
+
+resources
+	self shouldBeImplemented
+!
+
+setup
+	state := [ :delta | self update: delta ].
+	app ticker add: [ :delta | state value: delta ]
+! !
+
+!Game methodsFor: 'starting'!
+
+augmentPage
+	app ifNil: [ app := Libs pixi Application
+		newValue: #{
+			'width' -> 512.
+			'height' -> 512.
+			'antialiasing' -> true.
+			'transparent' -> false.
+			'resolution' -> 1 } ].
+	document body appendChild: app view.
+	self loadResources
+! !
+
+Game class instanceVariableNames: 'instance'!
+
+!Game class methodsFor: 'starting'!
+
+instance
+	^ instance
+!
+
+instance: anInstance
+	^ instance := anInstance
+!
+
+start
+	self new augmentPage
+! !
+
+Game subclass: #Pixigame
+	instanceVariableNames: ''
+	package: 'Pixigame'!
+!Pixigame commentStamp!
+I am the Amber application.!
+
+!Pixigame methodsFor: 'action'!
+
+lose
+	GameRegistry at: #endMessage put: 'You lost!!'.
+	(GameActor at: #scene) switchTo: (GameActor at: #endScene).
+	state := [ self end ]
+!
+
+update: aDelta
+	(GameRegistry at: #scene) update
+!
+
+win
+	GameRegistry at: #endMessage put: 'You won!!'.
+	(GameActor at: #scene) switchTo: (GameActor at: #endScene).
+	state := [ self end ]
+! !
+
+!Pixigame methodsFor: 'initialization'!
+
+initialize
+	super initialize.
+	app := Libs pixi Application newValue: #{
+		'width' -> 512.
+		'height' -> 512.
+		'antialiasing' -> true.
+		'transparent' -> false.
+		'resolution' -> 1 }
+! !
+
+!Pixigame methodsFor: 'setup'!
+
+resources
+	^ {'images/treasureHunter.json'. 'images/cat.png'}
+!
+
+setup
+	super setup.
+	Assets instance dictionary: (Libs pixi loader resources at: 'images/treasureHunter.json') textures.
+	self setupScenes
+!
+
+setupScenes
+	| sc endScene style |
+	
+	sc := PlayScene on: app stage.
+	GameActor at: #scene put: sc.
+	sc setup.
+
+	endScene := GameOverScene on: app stage.
+	GameActor at: #endScene put: endScene.
+	endScene setup
+! !
+
+!Pixigame class methodsFor: 'starting'!
+
+unusedProtection
+	"this method is here in case the compilation breaks and destroys the source code of the last class-side method"
+	self shouldNotImplement
+! !
+
 Actor subclass: #GameActor
 	instanceVariableNames: ''
 	package: 'Pixigame'!
+
+!GameActor methodsFor: 'accessing'!
+
+game
+	^ Pixigame
+! !
 
 !GameActor class methodsFor: 'accessing'!
 
@@ -123,7 +260,7 @@ takeDamage
 update
 	self move.
 	(self class at: #dungeon) contain: self.
-	(self health < 0) ifTrue: [ Pixigame instance lose ]
+	(self health < 0) ifTrue: [ self game instance lose ]
 ! !
 
 GameActor subclass: #HealthBar
@@ -199,7 +336,7 @@ update
 	
 	explorer := self class at: #explorer.
 	(explorer hits: self) ifTrue: [ self follow: explorer ].
-	(self hits: (self class at: #door)) ifTrue: [ Pixigame instance win ]
+	(self hits: (self class at: #door)) ifTrue: [ self game instance win ]
 ! !
 
 !Treasure methodsFor: 'initialization'!
@@ -332,106 +469,6 @@ update
 		ifFalse: [ explorer dontBlink ].
 	
 	(GameActor at: #treasure) update
-! !
-
-Object subclass: #Pixigame
-	instanceVariableNames: 'app loader state message gameOverScene'
-	package: 'Pixigame'!
-!Pixigame commentStamp!
-I am the Amber application.!
-
-!Pixigame methodsFor: 'action'!
-
-end
-	"(Registry at: #scene) visible: false.
-	gameOverScene visible: true"
-!
-
-gameLoop: aDelta
-	state value: aDelta
-!
-
-lose
-	GameRegistry at: #endMessage put: 'You lost!!'.
-	(GameActor at: #scene) switchTo: (GameActor at: #endScene).
-	state := [ self end ]
-!
-
-update: aDelta
-	(GameActor at: #scene) update
-!
-
-win
-	GameRegistry at: #endMessage put: 'You won!!'.
-	(GameActor at: #scene) switchTo: (GameActor at: #endScene).
-	state := [ self end ]
-! !
-
-!Pixigame methodsFor: 'initialization'!
-
-initialize
-	super initialize.
-	self class instance: self.
-	GameRegistry at: #rng put: Random new.
-	app := Libs pixi Application newValue: #{
-		'width' -> 512.
-		'height' -> 512.
-		'antialiasing' -> true.
-		'transparent' -> false.
-		'resolution' -> 1 }.
-	loader := Libs pixi loader
-! !
-
-!Pixigame methodsFor: 'setup'!
-
-setup
-	Assets instance dictionary: (loader resources at: 'images/treasureHunter.json') textures.
-	self setupScenes.
-	state := [ :delta | self update: delta ].
-	app ticker add: [ :delta | self gameLoop: delta ]
-!
-
-setupScenes
-	| scene endScene style |
-	
-	scene := PlayScene on: app stage.
-	GameActor at: #scene put: scene.
-	scene setup.
-
-	endScene := GameOverScene on: app stage.
-	GameActor at: #endScene put: endScene.
-	endScene setup
-! !
-
-!Pixigame methodsFor: 'starting'!
-
-augmentPage
-	document body appendChild: app view.
-	Libs pixi loader
-		add: 'images/treasureHunter.json';
-		add: 'images/cat.png';
-		load: [ self setup ]
-! !
-
-Pixigame class instanceVariableNames: 'instance'!
-
-!Pixigame class methodsFor: 'starting'!
-
-instance
-	^ instance
-!
-
-instance: anInstance
-	^ instance := anInstance
-!
-
-start
-	self new augmentPage
-!
-
-unusedProtection
-	"this method is here in case the compilation breaks and destroys the source code of the last class-side method"
-	self shouldNotImplement
 ! !
 
 !Rectangle methodsFor: '*Pixigame'!

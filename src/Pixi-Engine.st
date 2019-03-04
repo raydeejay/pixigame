@@ -19,6 +19,10 @@ alpha: aNumber
 	sprite alpha: aNumber
 !
 
+game
+	self shouldBeImplemented
+!
+
 height
 	^ sprite height
 !
