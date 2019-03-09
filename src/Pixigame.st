@@ -409,17 +409,3 @@ unusedProtection
 	self shouldNotImplement
 ! !
 
-!Rectangle methodsFor: '*Pixigame'!
-
-contain: aSprite
-	| collision |
-	
-	aSprite x < self origin x ifTrue: [ aSprite x: self origin x. collision := #left ].
-	aSprite y < self origin y ifTrue: [ aSprite y: self origin y. collision := #top ].
-	aSprite x + aSprite width > self extent x
-		ifTrue: [ aSprite x: self extent x - aSprite width. collision := #right ].
-	aSprite y + aSprite height > self extent y
-		ifTrue: [ aSprite y: self extent y - aSprite height. collision := #bottom ].
-	^ collision
-! !
-
