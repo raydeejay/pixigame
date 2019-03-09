@@ -132,6 +132,7 @@ move
 !
 
 update
+	"Do nothing by default"
 ! !
 
 !Actor class methodsFor: 'accessing'!
@@ -154,6 +155,86 @@ for: aTexture
 	^ self new sprite: (Libs pixi Sprite newValue: aTexture); yourself
 	"for: aTexture
 	^ self new sprite: (Libs pixi TilingSprite newValue: aTexture); yourself"
+! !
+
+Object subclass: #Board
+	instanceVariableNames: 'width height data'
+	package: 'Pixi-Engine'!
+
+!Board methodsFor: 'accessing'!
+
+at: aPoint
+	^ ((aPoint x between: 1 and: width) and: [ aPoint y between: 1 and: height ])
+		ifTrue: [ data at: aPoint x * width + aPoint y ]
+		ifFalse: [ #none ]
+!
+
+at: aPoint ifAbsent: aBlock
+	^ ((aPoint x between: 1 and: width) and: [ aPoint y between: 1 and: height ])
+		ifTrue: [ data at: aPoint x * width + aPoint y ifAbsent: aBlock ]
+		ifFalse: [ #none ]
+!
+
+at: aPoint put: aValue
+	^ ((aPoint x between: 1 and: width) and: [ aPoint y between: 1 and: height ])
+		ifTrue: [ data at: aPoint x * width + aPoint y put: aValue ]
+		ifFalse: [ #none ]
+!
+
+data: anObject
+	data := anObject
+!
+
+height
+	^ height
+!
+
+height: anObject
+	height := anObject
+!
+
+width
+	^ width
+!
+
+width: anObject
+	width := anObject
+! !
+
+!Board methodsFor: 'filling'!
+
+fillWith: anObject
+	(1 to: height)
+		do: [ :y |
+			(1 to: width)
+				do: [ :x |
+					self at: x@y put: anObject ] ]
+! !
+
+!Board methodsFor: 'initialization'!
+
+initialize
+	super initialize.
+	(width isNil or: [ height isNil ]) ifTrue: [ self error: 'Create instances of ', self class name, ' with #width:height: or #extent:' ].
+	data := Array new
+! !
+
+!Board class methodsFor: 'instance creation'!
+
+extent: aPoint
+	^ self basicNew
+		width: aPoint x;
+		height: aPoint y;
+		initialize;
+		yourself
+!
+
+width: aWidth height: aHeight
+	^ self basicNew
+		width: aWidth;
+		height: aHeight;
+		initialize;
+		yourself
 ! !
 
 Object subclass: #Game
@@ -396,6 +477,10 @@ code: aNumber onPress: aBlock onRelease: anotherBlock
 		yourself
 ! !
 
+Object subclass: #Level
+	instanceVariableNames: ''
+	package: 'Pixi-Engine'!
+
 Object subclass: #Libs
 	instanceVariableNames: ''
 	package: 'Pixi-Engine'!
@@ -416,6 +501,204 @@ inspectClasses
 
 pixi
 	^ PIXI
+! !
+
+Object subclass: #MapCarver
+	instanceVariableNames: 'board region'
+	package: 'Pixi-Engine'!
+
+!MapCarver methodsFor: 'accessing'!
+
+board: anObject
+	board := anObject
+!
+
+directions
+	^ {1 @ 0. -1 @ 0. 0 @ 1. 0 @ -1}
+! !
+
+!MapCarver methodsFor: 'carving'!
+
+carve: aNumber towards: aDirection at: aPoint
+	| newPosition |
+	
+	newPosition := aPoint.
+	
+	aNumber timesRepeat: [
+		newPosition := newPosition + aDirection.
+		board at: newPosition put: #floor ].
+	
+	^ newPosition
+!
+
+carveFromStack: aStack
+	| top position dir |
+			
+	top := aStack last.
+	position := top key.
+	dir := top value remove: top value atRandom.
+
+	top value ifEmpty: [ aStack removeLast ].
+	(((board at: position + dir ifAbsent: [ #none ]) = #wall)
+		and: [ self canCarveAt: position towards: dir ])
+			ifTrue: [
+				| newPosition newDirs |
+				
+				newPosition := self carve: 2 towards: dir at: position.
+				newDirs := self directions remove: (dir * -1); yourself.
+				aStack add: newPosition -> newDirs ]
+!
+
+carveRoom: aRoom
+	(aRoom origin y to: aRoom corner y)
+		do: [ :y |
+			(aRoom origin x to: aRoom corner x)
+				do: [ :x |
+					board at: x@y put: #floor ] ]
+! !
+
+!MapCarver methodsFor: 'initialization'!
+
+initialize
+	super initialize.
+	board ifNil: [ self error: 'Create instances of ', self class name, ' with #on:' ].
+	region := 1.
+	board fillWith: #wall
+! !
+
+!MapCarver methodsFor: 'printing'!
+
+print
+	| stream |
+	
+	stream := StringStream on: ''.
+	
+	(1 to: board height) do: [ :y |
+		(1 to: board width) do: [ :x |
+			stream
+				nextPut: (((board at: x@y) = #wall)
+					ifTrue: [ '█']
+					ifFalse: [ ' ' ]) ].
+		stream crlf ].
+	console
+		clear;
+		log: stream contents
+! !
+
+!MapCarver methodsFor: 'testing'!
+
+canCarveAt: aPoint
+	^ ((board at: aPoint) = #wall)
+		and: [ ((board at: aPoint + (0 @ 1)) = #wall)
+			and: [ ((board at: aPoint + (0 @ -1)) = #wall)
+				and: [ ((board at: aPoint + (1 @ 0)) = #wall)
+					and: [ ((board at: aPoint + (-1 @ 0)) = #wall) ] ] ] ]
+!
+
+canCarveAt: aPoint towards: aDirection
+	^ ((board at: aPoint + aDirection ifAbsent: [ #none ]) = #wall)
+		and: [ (board at: aPoint + (aDirection * 2) ifAbsent: [ #none ]) = #wall ]
+! !
+
+!MapCarver class methodsFor: 'instance creation'!
+
+on: aBoard
+	^ self basicNew
+		board: aBoard;
+		initialize;
+		yourself
+! !
+
+Object subclass: #MapGenerator
+	instanceVariableNames: 'board carver'
+	package: 'Pixi-Engine'!
+
+!MapGenerator methodsFor: 'accessing'!
+
+directions
+	^ {1 @ 0. -1 @ 0. 0 @ 1. 0 @ -1}
+! !
+
+!MapGenerator methodsFor: 'generating'!
+
+generate
+	self generateRooms generatePassages
+!
+
+generatePassageAt: aPoint
+	| stack |
+	
+	stack := Array with: aPoint -> self directions.
+	board at: aPoint put: #floor.
+
+	[ stack notEmpty ] whileTrue: [ carver carveFromStack: stack ]
+!
+
+generatePassages
+	(2 to: board height by: 2)
+		do: [ : y |
+			(2 to: board width by: 2)
+				do: [ :x |
+					(carver canCarveAt: x@y)
+						ifTrue: [ self generatePassageAt: x@y ] ] ]
+!
+
+generateRoom
+	| w h |
+	
+	w := (board width / 2) floor.
+	h := (board height / 2) floor.
+
+	^ (w atRandom * 2) @ (h atRandom * 2)
+		extent: (3 atRandom * 2 + 2) @ (3 atRandom * 2 + 2)
+!
+
+generateRooms
+	| inside rooms |
+	
+	inside := 2@2 corner: (board width @ board height) - (1@1).
+	rooms := Array new.
+
+	200 timesRepeat: [
+		| room |
+		
+		room := self generateRoom.
+		rooms
+			detect: [ :each | each overlapsBorders: room ]
+			ifNone: [
+				(inside containsRect: room)
+					ifTrue: [
+						carver carveRoom: room.
+						rooms add: room ] ] ]
+! !
+
+!MapGenerator methodsFor: 'initialization'!
+
+initialize
+	super initialize.
+	board := (Board width: 65 height: 65)
+		fillWith: #wall;
+		yourself.
+	carver := MapCarver on: board
+! !
+
+!MapGenerator methodsFor: 'printing'!
+
+print
+	| stream |
+	
+	stream := StringStream on: ''.
+	
+	(1 to: board height) do: [ :y |
+		(1 to: board width) do: [ :x |
+			stream
+				nextPut: (((board at: x@y) = #wall)
+					ifTrue: [ '█']
+					ifFalse: [ ' ' ]) ].
+		stream crlf ].
+	console
+		clear;
+		log: stream contents
 ! !
 
 Object subclass: #Registry
@@ -590,5 +873,189 @@ on: aStage
 		yourself.
 	aStage addChild: inst screen.
 	^ inst
+! !
+
+Object subclass: #Stage
+	instanceVariableNames: 'tiles'
+	package: 'Pixi-Engine'!
+
+!Stage methodsFor: 'as yet unclassified'!
+
+at: aKey
+	^ tiles at: aKey
+!
+
+at: aKey put: aValue
+	^ tiles at: aKey put: aValue
+!
+
+bounds
+	"for lack of a better implementation..."
+	
+	^ 0@0 extent: 37@37
+!
+
+initialize
+	super initialize.
+	tiles := Dictionary new
+! !
+
+Stage subclass: #DungeonMap
+	instanceVariableNames: 'currentRegion regions'
+	package: 'Pixi-Engine'!
+
+!DungeonMap methodsFor: 'building'!
+
+addJunction: aPoint
+	self at: aPoint put: self generateJunction
+!
+
+countExitsAt: aPoint
+	^ (self directions select: [ :dir | (self at: aPoint + dir) ~= #wall ]) size
+!
+
+directions
+	^ {0@-1. 0@1. -1@0. 1@0}
+!
+
+generateJunction
+	^ 4 atRandom = 1
+		ifTrue: [ 3 atRandom = 1
+			ifTrue: [ #openDoor ]
+			ifFalse: [ #floor ] ]
+		ifFalse: [ #closedDoor ]
+!
+
+isDeadEnd: aPoint
+	^ (self at: aPoint) ~= #wall and: [ (self countExitsAt: aPoint) = 1 ]
+!
+
+removeDeadEnds
+	| done |
+	
+	done isNil
+		whileTrue: [
+			done := true.
+			self bounds
+				pointsDo: [ :point |
+					(self isDeadEnd: point)
+						ifTrue: [
+							done := nil.
+							self at: point put: #wall ] ] ]
+! !
+
+!DungeonMap methodsFor: 'carving'!
+
+canCarveFrom: aPoint going: aDirection
+	^ (self bounds containsPoint: aDirection * 3 + aPoint)
+		ifTrue: [ (self at: aDirection * 2 + aPoint) = #wall ]
+		ifFalse: [ false ]
+!
+
+carve: aPoint
+	self carve: aPoint tile: #floor
+!
+
+carve: aPoint tile: aTileType
+	tiles at: aPoint put: aTileType.
+	regions at: aPoint put: currentRegion
+! !
+
+!DungeonMap methodsFor: 'initialization'!
+
+initialize
+	super initialize.
+	currentRegion := -1
+! !
+
+!DungeonMap methodsFor: 'regions'!
+
+connectRegions
+	| connectorRegions connectors merged openRegions |
+	
+	connectorRegions := Dictionary new.
+	
+	self bounds
+		pointsDo: [ :point |
+			| regs |
+			
+			( (self hasWallAt: point) and: [ regs := self regionsAt: point. regs size > 1 ] )
+				ifTrue: [ connectorRegions at: point put: regs ] ].
+	connectors := connectorRegions keys.
+	
+	merged := Dictionary new.
+	openRegions := Set new.
+	(1 to: currentRegion)
+		do: [ :each |
+		merged at: each put: each.
+		openRegions add: each ].
+!
+
+countRegionsAt: aPoint
+	| rs |
+	
+	rs := Set new.
+	self directions do: [ :dir |
+		(regions at: aPoint + dir)
+			ifNotNil: [ :region | rs add: region ] ].
+	^ rs
+!
+
+regionsAt: aPoint
+	^ (self directions
+		select: [ :dir |
+			(regions at: aPoint + dir) isNotNil ] ) asSet
+!
+
+startRegion
+	currentRegion := currentRegion + 1
+! !
+
+!DungeonMap methodsFor: 'testing'!
+
+hasWallAt: aPoint
+	^ (self at: aPoint) = #wall
+! !
+
+!Rectangle methodsFor: '*Pixi-Engine'!
+
+contain: aSprite
+	| collision |
+	
+	aSprite x < self origin x ifTrue: [ aSprite x: self origin x. collision := #left ].
+	aSprite y < self origin y ifTrue: [ aSprite y: self origin y. collision := #top ].
+	aSprite x + aSprite width > self extent x
+		ifTrue: [ aSprite x: self extent x - aSprite width. collision := #right ].
+	aSprite y + aSprite height > self extent y
+		ifTrue: [ aSprite y: self extent y - aSprite height. collision := #bottom ].
+	^ collision
+!
+
+doesntOverlap: aRectangle
+	^ aRectangle origin x > self corner x or: [
+		aRectangle corner x < self origin x or: [
+			aRectangle origin y > self corner y or: [
+				aRectangle corner y < self origin y ] ] ]
+!
+
+doesntOverlapBorders: aRectangle
+	^ (aRectangle origin x - 1) > self corner x or: [
+		(aRectangle corner x + 1) < self origin x or: [
+			(aRectangle origin y - 1) > self corner y or: [
+				(aRectangle corner y + 1 ) < self origin y ] ] ]
+!
+
+overlaps: aRectangle
+	^ (self doesntOverlap: aRectangle) not
+!
+
+overlapsBorders: aRectangle
+	^ (self doesntOverlapBorders: aRectangle) not
+!
+
+pointsDo: aBlock
+	(origin x to: corner x)
+		do: [ :x | (origin y to: corner y)
+				do: [ :y | aBlock value: x@y ] ]
 ! !
 
